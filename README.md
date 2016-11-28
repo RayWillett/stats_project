@@ -20,23 +20,27 @@ http://www.ucs.cam.ac.uk/docs/course-notes/unix-courses/pythontopics/graphs.pdf
 
 #Project spec:
 
-~~a. start with a known quadratic~~ - Ray
-~~b. generate perfect data along that quadratic~~ -Ray
-~~c. generate noise ~~ -Ray
-~~d. add the noise to the perfect data; graph the result~~ Ray
-~~e. fit a straight line to the noisy data; add that to the graph -Ray
-f. compute the residual at some particular x-value (either near the
+* ~~a. start with a known quadratic~~ - Ray
+* ~~b. generate perfect data along that quadratic~~ -Ray
+* ~~c. generate noise ~~ -Ray
+* ~~d. add the noise to the perfect data; graph the result~~ -Ray
+* ~~e. fit a straight line to the noisy data; add that to the graph -Ray
+
+* f. compute the residual at some particular x-value (either near the
 middle of the x range, or near the end, but not near where the
 straight line crosses the known quadratic)
-g. record the residual, add it to a histogram (plan on maybe 30 bins
+
+* g. record the residual, add it to a histogram (plan on maybe 30 bins
 since sqrt(1000) is about 30)
-h. repeat at step c, maybe 1000 times (not showing each of the 1000 as
+
+* h. repeat at step c, maybe 1000 times (not showing each of the 1000 as
 a separate frame in the movie. Maybe show 1 frame per second for 4
 seconds, then 2 frames per second for 4 seconds, then 4 frames/sec for
 4 sec, then 8 frames/sec for 4 sec, etc.). At some point (above 30
 frames/sec?) you can just stop showing individual frames and jump to
 the finished histogram.
-i. On the resulting histogram, make the 0 mark clear, and also compute
+
+* i. On the resulting histogram, make the 0 mark clear, and also compute
 the mean and SD of the recorded residuals and show them on the graph,
 numerically and graphically.
 
@@ -97,3 +101,4 @@ work. We'll see what we have time for this semester."
 
 #Markdown cheatsheet
  * https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+

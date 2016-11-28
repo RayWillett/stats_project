@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
 
 #DEBUG MODES
 debug = False
@@ -8,17 +9,23 @@ no_noise = False
 show_true = True
 
 
-random.seed(a=1738, )
+random.seed( a=1738, )
 
+# Ray
 def true_value(a=0, b=0, c=0, x=0):
     return a*(x**2) + b*(x) + c
 
+# Ray
 def random_noise(r):
     if no_noise:
         return 0
     return (random.random() * r) - (r / 2) #random float between [-(range/2), (range/2)]
 
-def get_data_and_noise(s, e): #start, end, noise's range
+# Ray
+# @param {s} start, noise x value range
+# @param {e} end, noise x value range
+# @return {list}
+def get_data_and_noise(s, e):
     list = []
     for i in range(s, e+1, 10):
         tru_val = true_value(a=2, b=7, c=5, x=i)
@@ -27,11 +34,17 @@ def get_data_and_noise(s, e): #start, end, noise's range
         list.append(data)
     return list
 
+# Ray
+# Returns the correct yhat formulat based on the degree of the polynomial
+# @param {xs} a list of x values
+# @param {ys} a list of y vales
+# @return {list} a list containing the correct yhat formulas for given x values
 def get_trendline(xs, ys, degree):
     list = []
     z = np.polyfit(xs, ys, degree)
+
+    #iterate over the list of x values, assigning the correct yhat formula and appending to @return list[]
     for i, x in enumerate(xs):
-        yhat = -1
         if degree == 1:
             yhat = x*z[0] + z[1]
         elif degree == 2:
@@ -44,6 +57,7 @@ def get_trendline(xs, ys, degree):
             raise Exception("INVALID DEGREE")
         list.append(yhat)
     return list
+
 
 list = get_data_and_noise(0, 500)
 
@@ -58,8 +72,9 @@ if show_true:
     plt.plot(xs, os, color='r') #graph true line NOT the trendline
 
 
-#show linear trendline
-#plt.plot(xs, ls, color='g')
+# show linear trendline
+#     plt.plot(xs, ls, color='g')
+
 
 plt.show()
 if debug:
