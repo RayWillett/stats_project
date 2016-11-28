@@ -78,15 +78,9 @@ plt.scatter(xs, ys)
 if show_true:
     plt.plot(xs, os, color='r') #graph true line NOT the trendline
 
-<<<<<<< HEAD
-
-# show linear trendline
-#     plt.plot(xs, ls, color='g')
-=======
 #show linear trendline
 plt.plot(xs, ls, color='g')
 diff = get_residual(ys, ls, (x-start))
->>>>>>> c808315cbd3cb457ec751e9ded16c4a2dcd50edc
 
 
 plt.show()

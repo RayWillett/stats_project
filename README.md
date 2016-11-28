@@ -22,15 +22,15 @@ http://www.ucs.cam.ac.uk/docs/course-notes/unix-courses/pythontopics/graphs.pdf
 
 #Project spec:
 
-~~a. start with a known quadratic~~ - Ray
-~~b. generate perfect data along that quadratic~~ -Ray
-~~c. generate noise ~~ -Ray
-~~d. add the noise to the perfect data; graph the result~~ Ray
-~~e. fit a straight line to the noisy data; add that to the graph -Ray
-~~f. compute the residual at some particular x-value (either near the
+* ~~a. start with a known quadratic~~ - Ray
+* ~~b. generate perfect data along that quadratic~~ -Ray
+* ~~c. generate noise ~~ -Ray
+* ~~d. add the noise to the perfect data; graph the result~~ Ray
+* ~~e. fit a straight line to the noisy data; add that to the graph -Ray
+* ~~f. compute the residual at some particular x-value (either near the
 middle of the x range, or near the end, but not near where the
 straight line crosses the known quadratic)~~Ray
-g. record the residual, add it to a histogram (plan on maybe 30 bins
+* g. record the residual, add it to a histogram (plan on maybe 30 bins
 since sqrt(1000) is about 30)
 
 * h. repeat at step c, maybe 1000 times (not showing each of the 1000 as
