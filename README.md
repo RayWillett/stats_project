@@ -14,9 +14,11 @@ http://matplotlib.org/examples/shapes_and_collections/scatter_demo.html
 http://www.ucs.cam.ac.uk/docs/course-notes/unix-courses/pythontopics/graphs.pdf
 
 
+#Comments
+  * Match functions to bullet points -> i.e. put in a comment this finishes part a of checklist.
+
 
 #Project spec:
-
 
 ~~a. start with a known quadratic~~ - Ray
 ~~b. generate perfect data along that quadratic~~ -Ray
