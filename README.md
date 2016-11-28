@@ -24,7 +24,7 @@ http://www.ucs.cam.ac.uk/docs/course-notes/unix-courses/pythontopics/graphs.pdf
 
 * ~~a. start with a known quadratic~~ - Ray
 * ~~b. generate perfect data along that quadratic~~ -Ray
-* ~~c. generate noise ~~ -Ray
+* ~~c. generate noise~~ -Ray
 * ~~d. add the noise to the perfect data; graph the result~~ Ray
 * ~~e. fit a straight line to the noisy data; add that to the graph -Ray
 * ~~f. compute the residual at some particular x-value (either near the
