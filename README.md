@@ -1,11 +1,10 @@
 clone into $working_dir
 
 ````bash
-sudo apt-get install python3-tk
 python3 -m pip install virtualenv
 cd $working_dir
 virtualenv env
-./env/bin/activate
+source ./env/bin/activate
 python3 -m pip install matplotlib
 ```
 

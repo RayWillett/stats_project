@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 #DEBUG MODES
 debug = False
 no_noise = False
-show_true = False
+show_true = True
 
 
 random.seed(a=1738, )
@@ -19,14 +19,14 @@ def random_noise(r):
 
 def get_data_and_noise(s, e): #start, end, noise's range
     list = []
-    for i in range(s, e+1):
+    for i in range(s, e+1, 10):
         tru_val = true_value(a=2, b=7, c=5, x=i)
         yval = tru_val + random_noise(e**2)#TODO: is this the best range for noise?
         data = (i, yval, tru_val)
         list.append(data)
     return list
 
-list = get_data_and_noise(0, 50)
+list = get_data_and_noise(0, 500)
 
 xs = [x for (x,y,o) in list] #list of x values
 ys = [y for (x,y,o) in list] #list of noisy data values
