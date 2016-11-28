@@ -2,12 +2,12 @@ import random
 import matplotlib.pyplot as plt
 
 #DEBUG MODES
-debug = True
+debug = False
 no_noise = False
-show_true = True
+show_true = False
 
 
-random.seed(a=1738, version=2)
+random.seed(a=1738, )
 
 def true_value(a=0, b=0, c=0, x=0):
     return a*(x**2) + b*(x) + c
