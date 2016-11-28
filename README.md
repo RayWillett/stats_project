@@ -1,3 +1,4 @@
+#Getting Started
 clone into $working_dir
 
 ````bash
@@ -8,22 +9,20 @@ source ./env/bin/activate
 python3 -m pip install matplotlib
 ```
 
-
-Here's a pile of documentation:
+#Documentation:
 http://matplotlib.org/examples/shapes_and_collections/scatter_demo.html
 http://www.ucs.cam.ac.uk/docs/course-notes/unix-courses/pythontopics/graphs.pdf
 
 
 
-rough draft of project spec:
+#Project spec:
 
-"Just to write down in sequence what we said:
 
-a. start with a known quadratic
-b. generate perfect data along that quadratic
-c. generate noise
-d. add the noise to the perfect data; graph the result
-e. fit a straight line to the noisy data; add that to the graph
+~~a. start with a known quadratic~~ - Ray
+~~b. generate perfect data along that quadratic~~ -Ray
+~~c. generate noise ~~ -Ray
+~~d. add the noise to the perfect data; graph the result~~ Ray
+~~e. fit a straight line to the noisy data; add that to the graph -Ray
 f. compute the residual at some particular x-value (either near the
 middle of the x range, or near the end, but not near where the
 straight line crosses the known quadratic)
@@ -92,3 +91,7 @@ into a training set and a testing set. I'd like to make a video about
 that too, using the same framework that you'll develop in the above
 work. We'll see what we have time for this semester."
 >Dr Ross
+
+
+#Markdown cheatsheet
+ * https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
