@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #DEBUG MODES
 debug = False
 no_noise = False
-show_true = True
+show_true = False
 
 
 random.seed(a=1738, )
@@ -20,9 +20,9 @@ def random_noise(r):
 
 def get_data_and_noise(s, e): #start, end, noise's range
     list = []
-    for i in range(s, e+1, 10):
+    for i in range(s, e+1):
         tru_val = true_value(a=2, b=7, c=5, x=i)
-        yval = tru_val + random_noise(e**2)#TODO: is this the best range for noise?
+        yval = tru_val + random_noise(e**2)
         data = (i, yval, tru_val)
         list.append(data)
     return list
@@ -45,7 +45,15 @@ def get_trendline(xs, ys, degree):
         list.append(yhat)
     return list
 
-list = get_data_and_noise(0, 500)
+def get_residual(ys, yhats, x):
+    return ys[x] - yhats[x]
+
+
+
+
+start = 0
+end = 50
+list = get_data_and_noise(start, end)
 
 xs = [x for (x,y,o) in list] #list of x values
 ys = [y for (x,y,o) in list] #list of noisy data values
@@ -57,9 +65,10 @@ plt.scatter(xs, ys)
 if show_true:
     plt.plot(xs, os, color='r') #graph true line NOT the trendline
 
-
 #show linear trendline
-#plt.plot(xs, ls, color='g')
+plt.plot(xs, ls, color='g')
+diff = get_residual(ys, ls, (x-start))
+
 
 plt.show()
 if debug:
