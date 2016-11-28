@@ -37,9 +37,6 @@ plt.scatter(xs, ys)
 if show_true:
     plt.plot(xs, os, color='r') #graph true line NOT the trendline
 
-
-
-
 plt.show()
 if debug:
     print(list)
