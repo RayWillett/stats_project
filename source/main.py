@@ -58,11 +58,11 @@ def get_trendline(xs, ys, degree):
         list.append(yhat)
     return list
 
+#Ray
+# Calculates single residual
+# @return a single residual
 def get_residual(ys, yhats, x):
     return ys[x] - yhats[x]
-
-
-
 
 start = 0
 end = 50
