@@ -129,7 +129,7 @@ def iterate(n=1000):
         if show_fig:
             scatter.scatter(xs, ys)
             scatter.plot(xs, ls, color='g')
-            histo.axvline(main_x, color='b', linestyle='dashed', linewidth=1)
+            scatter.axvline(main_x, color='b', linestyle='dashed', linewidth=1)
             histo.hist(diff, bins=int(np.sqrt(n)))
 
             if show_true:

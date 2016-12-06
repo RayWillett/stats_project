@@ -1,4 +1,7 @@
-.idea
-.idea/*/
+.idea/workspace.yml
+.idea/tasks.xml
+.idea/dictionsaries
+.idea/vcs.xml
+.idea/misc.xml
 env/
 source/.idea
