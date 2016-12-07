@@ -1,19 +1,22 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Button
+import matplotlib.patches as mpatches
+
 
 #CONFIG
 debug = False
 no_noise = False
 show_true = False
+
 show_fig = True
 save_images = True
 
 
+plt.rcParams['xtick.major.pad'] = 8
+plt.rcParams['ytick.major.pad'] = 8
 random.seed( a=1738, )
-main_x = 16
-fig, (scatter, histo) = plt.subplots(nrows=2, ncols=1) #plt.figure(figsize=(12,10))
+main_x = 38
 
 # Ray
 # @param [a] coefficient of the x-squared term, optional
@@ -59,22 +62,40 @@ def get_data(s, e):
 # @return {list} a list containing the correct yhat formulas for given x values
 def get_trendline(xs, ys, degree):
     list = []
+    coeff = [0, 0, 0, 0, 0] #list of coefficients, where index is the power
     z = np.polyfit(xs, ys, degree)
 
     #iterate over the list of x values, assigning the correct yhat formula and appending to @return list[]
     for i, x in enumerate(xs):
-        if degree == 1:
+        if degree == 0:
+            yhat = z[0]
+            coeff[0] = z[0]
+        elif degree == 1:
             yhat = x*z[0] + z[1]
+            coeff[1] = z[0]
+            coeff[0] = z[1]
         elif degree == 2:
             yhat = (x**2)*z[0] + x*z[1] + z[2]
+            coeff[2] = z[0]
+            coeff[1] = z[1]
+            coeff[0] = z[2]
         elif degree == 3:
             yhat = (x**3)*z[0] + (x**2)*z[1] + x*z[2] + z[3]
+            coeff[3] = z[0]
+            coeff[2] = z[1]
+            coeff[1] = z[2]
+            coeff[0] = z[3]
         elif degree == 4:
             yhat = (x**4)*z[0] + (x**3)*z[1] + (x**2)*z[2] + x*z[3] + z[4]
+            coeff[4] = z[0]
+            coeff[3] = z[1]
+            coeff[2] = z[2]
+            coeff[1] = z[3]
+            coeff[0] = z[4]
         else:
             raise Exception("INVALID DEGREE")
         list.append(yhat)
-    return list
+    return (list, coeff)
 
 #Ray
 # Calculates single residual
@@ -87,17 +108,42 @@ def get_residual(ys, yhats, x):
 
 # Ray
 # gets multiple residual values at at x to populate histogram
+# @param {d} degree of trend line
 # @param [n] number of iterations, optional
 # @return None
-def iterate(n=1000):
+def iterate(d, n=1000):
     start = 0
     end = 50
     data = get_data(start, end)
-    diff = []
-    magic_number = 1
-    base = "../images/second_degree/trend_line/image_"
+
+    diff = [] #list of residuals
+    coeff = [] # list of coefficients
+
+    #save figure file directory and extension
+    base = "../images/"
+    if d == 0:
+        title = "zeroth_degree"
+        base += title
+    elif d == 1:
+        title = "first_degree"
+        base += title
+    elif d == 2:
+        title = "second_degree"
+        base += title
+    elif d == 3:
+        title = "third_degree"
+        base += title
+    elif d == 4:
+        title = "fourth_degree"
+        base += title
+    else:
+        return #ERROR! Exit
+
+    base += "/trend_line/image_"
     ext = ".png"
 
+    fig, (scatter, histo) = plt.subplots(nrows=2, ncols=1)
+    fig.suptitle(title)
     for i in range(n):
         fig.tight_layout()
         scatter.clear()
@@ -105,25 +151,10 @@ def iterate(n=1000):
         list1 = get_noisy_data(start, end, data)
 
         xs, ys, os = [list(elem) for elem in zip(*list1)]
-        ls = get_trendline(xs, ys, 2)
+        (ls, z) = get_trendline(xs, ys, d)
 
+        coeff.append(z) #track residuals
         diff.append(get_residual(ys, ls, (main_x-start)))
-
-        if i % magic_number == 0:
-            show_fig = True
-        else:
-            show_fig = False
-
-        if n / 4 > i > 4:
-            magic_number = 2
-        elif n / 3 > i:
-            magic_number = 5
-        elif n / 2 > i:
-            magic_number = 10
-        elif n / .8 > i:
-            magic_number = 50
-        else:
-            magic_number = n
 
         #show linear trendline
         if show_fig:
@@ -144,6 +175,7 @@ def iterate(n=1000):
             if debug:
                 print(i)
                 print(diff)
+    #calculate mean and standard deviations of the residuals
     sd = np.std(diff)
     mean = np.mean(diff)
 
@@ -151,7 +183,12 @@ def iterate(n=1000):
         print(mean)
         print(sd)
 
-    histo.hist(diff, bins=int(np.sqrt(n)))
+
+    #plot the last frame
+    scatter.scatter(xs, ys)
+    scatter.plot(xs, ls, color='g')
+    scatter.axvline(main_x, color='b', linestyle='dashed', linewidth=1)
+    histo.hist(diff, bins=int(np.sqrt(n)), color='b')
     histo.axvline(mean, color='r', linestyle='dashed', linewidth=2)
     histo.axvline(mean+sd, color='r', linestyle='dashed', linewidth=1)
     histo.axvline(mean-sd, color='r', linestyle='dashed', linewidth=1)
@@ -163,5 +200,144 @@ def iterate(n=1000):
         fig.savefig(filename)
     if debug:
         input("Waiting....")
+    return (diff, coeff)
 
-iterate(100)
+def coefficient_histogram(coeffs):
+    filename = "../images/coefficients/image.png"
+    fig, (c0, c1, c2, c3, c4) = plt.subplots(nrows=1, ncols=5, figsize=(14, 6))
+
+    #drawing settings
+    fig.suptitle("Coefficients of Trendlines")
+
+    c0.set_title("x^0")
+    c0.autoscale_view(True,True, True)
+    c1.set_title("x^1")
+    c1.autoscale_view(True,True, True)
+    c2.set_title("x^2")
+    c2.autoscale_view(True,True, True)
+    c3.set_title("x^3")
+    c3.autoscale_view(True,True, True)
+    c4.set_title("x^4")
+    c4.autoscale_view(True,True, True)
+
+    plt.setp(c0.get_xticklabels(), rotation=45, horizontalalignment='right')
+    plt.setp(c1.get_xticklabels(), rotation=45, horizontalalignment='right')
+    plt.setp(c2.get_xticklabels(), rotation=45, horizontalalignment='right')
+    plt.setp(c3.get_xticklabels(), rotation=45, horizontalalignment='right')
+    plt.setp(c4.get_xticklabels(), rotation=45, horizontalalignment='right')
+
+    #generate histograms
+    data = [x[0] for x in coeffs]
+    c0.hist(data, color='b')
+    mean = np.mean(data)
+    sd = np.std(data)
+    c0.axvline(mean, color='r', linestyle='dashed', linewidth=2)
+    c0.axvline(mean+sd, color='r', linestyle='dashed', linewidth=1)
+    c0.axvline(mean-sd, color='r', linestyle='dashed', linewidth=1)
+
+
+    data = [x[1] for x in coeffs]
+    c1.hist(data, color='b')
+    mean = np.mean(data)
+    sd = np.std(data)
+    c1.hist(data)
+    c1.axvline(mean, color='r', linestyle='dashed', linewidth=2)
+    c1.axvline(mean+sd, color='r', linestyle='dashed', linewidth=1)
+    c1.axvline(mean-sd, color='r', linestyle='dashed', linewidth=1)
+
+    data = [x[2] for x in coeffs]
+    c2.hist(data)
+    mean = np.mean(data)
+    sd = np.std(data)
+    c2.hist(data, color='b')
+    c2.axvline(mean, color='r', linestyle='dashed', linewidth=2)
+    c2.axvline(mean+sd, color='r', linestyle='dashed', linewidth=1)
+    c2.axvline(mean-sd, color='r', linestyle='dashed', linewidth=1)
+
+    data = [x[3] for x in coeffs]
+    c3.hist(data, color='b')
+    mean = np.mean(data)
+    sd = np.std(data)
+    c3.hist(data)
+    c3.axvline(mean, color='r', linestyle='dashed', linewidth=2)
+    c3.axvline(mean+sd, color='r', linestyle='dashed', linewidth=1)
+    c3.axvline(mean-sd, color='r', linestyle='dashed', linewidth=1)
+
+    data = [x[4] for x in coeffs]
+    c4.hist(data, color='b')
+    mean = np.mean(data)
+    sd = np.std(data)
+    c4.hist(data)
+    c4.axvline(mean, color='r', linestyle='dashed', linewidth=2)
+    c4.axvline(mean+sd, color='r', linestyle='dashed', linewidth=1)
+    c4.axvline(mean-sd, color='r', linestyle='dashed', linewidth=1)
+
+    if show_fig:
+        fig.canvas.draw()
+        fig.show()
+    if debug:
+        input("waiting...")
+    if save_images:
+        fig.savefig(filename)
+    return
+
+def frequency_polygon(hist0, hist1, hist2, hist3, hist4):
+    filename = "../images/freq_polygon/image.png"
+    fig = plt.figure()
+    freq = fig.add_subplot(111)
+    fig.suptitle("Residual Frequencies Overlay")
+    #legend data
+    #x0 = mpatches.Patch(color='red', label='x^0')
+    #x1 = mpatches.Patch(color='green', label='x^1')
+    #x2 = mpatches.Patch(color='blue', label='x^2')
+    #x3 = mpatches.Patch(color='black', label='x^3')
+    #x4 = mpatches.Patch(color='brown', label='x^4')
+    #fig.legend(handles=[x0, x1, x2, x3, x4])
+
+    #graph datas
+    n, bins, patches0 = freq.hist(hist0, histtype="step", color='red', label='x^0')
+    n, bins, patches1 = freq.hist(hist1, histtype="step", color='green', label='x^1')
+    n, bins, patches2 = freq.hist(hist2, histtype="step", color='blue', label='x^2')
+    n, bins, patches3 = freq.hist(hist3, histtype="step", color='black', label='x^3')
+    n, bins, patches4 = freq.hist(hist4, histtype="step", color='purple', label='x^4')
+
+    freq.legend([patches0[0],patches1[0], patches2[0], patches3[0], patches4[0]], ["x^0", "x^1", "x^2", "x^3", "x^4"])
+    if show_fig:
+        fig.canvas.draw()
+        fig.show()
+    if debug:
+        input('waiting')
+    if save_images:
+        fig.savefig(filename)
+
+
+number_of_iterations = 1000
+coefficients = [] #save the coefficients between runs
+print("Starting average trendline")
+(hist_data0, coeffs) = iterate(0, number_of_iterations)
+coefficients.extend(coeffs)
+
+print("Starting first degree trendline")
+(hist_data1, coeffs) = iterate(1, number_of_iterations)
+coefficients.extend(coeffs)
+
+print("Starting second degree trendline")
+(hist_data2, coeffs) = iterate(2, number_of_iterations)
+coefficients.extend(coeffs)
+
+print("Starting third degree trendline")
+(hist_data3, coeffs) = iterate(3, number_of_iterations)
+coefficients.extend(coeffs)
+
+print("Starting fourth degree trendline")
+(hist_data4, coeffs) = iterate(4, number_of_iterations)
+coefficients.extend(coeffs)
+
+print("finished... Showing the Histogram Overlay")
+frequency_polygon(hist_data0, hist_data1, hist_data2, hist_data3, hist_data4)
+
+print("finished... Drawing Coefficient histograms...")
+coefficient_histogram(coefficients)
+
+
+print("Done. Exiting")
