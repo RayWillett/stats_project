@@ -16,7 +16,7 @@ save_images = True
 plt.rcParams['xtick.major.pad'] = 8
 plt.rcParams['ytick.major.pad'] = 8
 random.seed( a=1738, )
-main_x = 38
+main_x = 25
 
 # Ray
 # @param [a] coefficient of the x-squared term, optional
@@ -38,12 +38,13 @@ def random_noise(r):
 # Ray
 # @param {s} start, noise x value range
 # @param {e} end, noise x value range
+# @param [r], random of random noise, optional
 # @return {list} a list of noisy data
-def get_noisy_data(s, e, data):
+def get_noisy_data(s, e, data, r=100):
     list1 = []
     for i in range(s, e+1):
         tru_val = data[i]
-        yval = tru_val + random_noise(e**2)
+        yval = tru_val + random_noise(r)
         noisy = (i, yval, tru_val) #x, y, o
         list1.append(noisy)
     return list1
@@ -51,7 +52,7 @@ def get_noisy_data(s, e, data):
 def get_data(s, e):
     list1 = []
     for i in range(s, e+1):
-        true_val = true_value(a=2, b=7, c=5, x=i)
+        true_val = true_value(a=1, b=-40, c=2100, x=i)
         list1.append(true_val)
     return list1
 
@@ -122,19 +123,19 @@ def iterate(d, n=1000):
     #save figure file directory and extension
     base = "../images/"
     if d == 0:
-        title = "zeroth_degree"
+        title = "degree0"
         base += title
     elif d == 1:
-        title = "first_degree"
+        title = "degree1"
         base += title
     elif d == 2:
-        title = "second_degree"
+        title = "degree2"
         base += title
     elif d == 3:
-        title = "third_degree"
+        title = "degree3"
         base += title
     elif d == 4:
-        title = "fourth_degree"
+        title = "degree4"
         base += title
     else:
         return #ERROR! Exit
@@ -148,7 +149,7 @@ def iterate(d, n=1000):
         fig.tight_layout()
         scatter.clear()
         histo.clear()
-        list1 = get_noisy_data(start, end, data)
+        list1 = get_noisy_data(start, end, data, r=250)
 
         xs, ys, os = [list(elem) for elem in zip(*list1)]
         (ls, z) = get_trendline(xs, ys, d)
@@ -170,7 +171,7 @@ def iterate(d, n=1000):
             fig.canvas.draw() #
             fig.show()
             if save_images:
-                filename = base + str(i) + ext
+                filename = base + str(i).rjust(5, '0') + ext
                 fig.savefig(filename)
             if debug:
                 print(i)
@@ -311,7 +312,7 @@ def frequency_polygon(hist0, hist1, hist2, hist3, hist4):
         fig.savefig(filename)
 
 
-number_of_iterations = 1000
+number_of_iterations = 11
 coefficients = [] #save the coefficients between runs
 print("Starting average trendline")
 (hist_data0, coeffs) = iterate(0, number_of_iterations)
