@@ -312,7 +312,7 @@ def frequency_polygon(hist0, hist1, hist2, hist3, hist4):
         fig.savefig(filename)
 
 
-number_of_iterations = 11
+number_of_iterations = 1000
 coefficients = [] #save the coefficients between runs
 print("Starting average trendline")
 (hist_data0, coeffs) = iterate(0, number_of_iterations)
