@@ -77,10 +77,34 @@ def get_trendline(xs, ys, degree):
     return (list, coeff)
 
 
+def extrapolate_trendline(xs, z, d):
+    values = []
+    if d == 4:
+        for x in xs:
+            value = z[4] * x**4 + z[3] * x**3 + z[2] * x**2 + z[1] * x + z[0]
+            values.append(value)
+    elif d == 3:
+        for x in xs:
+            value = z[3] * x ** 3 + z[2] * x ** 2 + z[1] * x + z[0]
+            values.append(value)
+    elif d == 2:
+        for x in xs:
+            value = z[2] * x**2 + z[1] * x + z[0]
+            values.append(value)
+    elif d == 1:
+        for x in xs:
+            value = z[1] * x + z[0]
+            values.append(value)
+    elif d == 0:
+        for x in xs:
+            value = z[0]
+            values.append(value)
+    return values
+
 def iterate(d, n=10):
     trend_start = 0
     trend_end = 50
-    graph_end = 120
+    graph_end = 75
 
     data = get_data(trend_start, graph_end)
 
@@ -96,12 +120,14 @@ def iterate(d, n=10):
 
         fig.tight_layout()
         scatter.clear()
-        list1 = get_noisy_data(trend_start, trend_end, data, r=400)
+        list1 = get_noisy_data(trend_start, graph_end, data, r=400)
 
         xs, ys, os = [list(elem) for elem in zip(*list1)]
-        (ls, z) = get_trendline(xs, ys, d)
+        (_, z) = get_trendline(xs[trend_start:trend_end], ys[trend_start:trend_end], d)
+        #(ls, z) = get_trendline(xs, ys, d)
 
-
+        ls = extrapolate_trendline(xs, z, d);
+        print(ys)
 
         #show linear trendline
         if show_fig:
@@ -116,6 +142,4 @@ def iterate(d, n=10):
             fig.show()
             if save_images:
                 fig.savefig(base + str(i).rjust(2, '0') + ext)
-            #input("waiting...")
-
-iterate(4) #generate 10 of them and pick the best
+iterate(0) #generate 10 of them and pick the best
