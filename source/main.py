@@ -145,6 +145,7 @@ def iterate(d, n=1000):
 
     fig, (scatter, histo) = plt.subplots(nrows=2, ncols=1)
     fig.suptitle("fit=" + title + " when true=degree2")
+    scatter.set_ylim([1200, 2800])
     for i in range(n):
         fig.tight_layout()
         scatter.clear()
@@ -162,6 +163,7 @@ def iterate(d, n=1000):
             scatter.scatter(xs, ys)
             scatter.plot(xs, ls, color='g')
             scatter.axvline(main_x, color='b', linestyle='dashed', linewidth=1)
+            scatter.plot([main_x, main_x], [ls[main_x], ys[main_x]], color='r', lw=2);
             histo.hist(diff, bins=int(np.sqrt(n)))
 
             # calculate mean and standard deviations of the residuals
@@ -179,7 +181,7 @@ def iterate(d, n=1000):
             fig.canvas.draw() #
             fig.show()
             if save_images:
-                filename = base + str(i).rjust(5, '0') + ext
+                filename = base + str(i).rjust(4, '0') + ext
                 fig.savefig(filename)
             if debug:
                 print(i)
@@ -205,7 +207,7 @@ def iterate(d, n=1000):
     fig.canvas.draw()
     fig.show()
     if save_images:
-        filename = base + str(i) + ext
+        filename = base + str(i).rjust(4, '0') + ext
         fig.savefig(filename)
     if debug:
         input("Waiting....")
