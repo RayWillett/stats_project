@@ -7,8 +7,8 @@ import matplotlib.patches as mpatches
 #CONFIG
 debug = False
 no_noise = False
-show_true = False
 
+show_true = True
 show_fig = True
 save_images = True
 
@@ -144,7 +144,7 @@ def iterate(d, n=1000):
     ext = ".png"
 
     fig, (scatter, histo) = plt.subplots(nrows=2, ncols=1)
-    fig.suptitle(title)
+    fig.suptitle("fit=" + title + " when true=degree2")
     for i in range(n):
         fig.tight_layout()
         scatter.clear()
@@ -164,8 +164,16 @@ def iterate(d, n=1000):
             scatter.axvline(main_x, color='b', linestyle='dashed', linewidth=1)
             histo.hist(diff, bins=int(np.sqrt(n)))
 
+            # calculate mean and standard deviations of the residuals
+            sd = np.std(diff)
+            mean = np.mean(diff)
+            histo.hist(diff, bins=int(np.sqrt(n)), color='b')
+            histo.axvline(mean, color='r', linestyle='dashed', linewidth=2)
+            histo.axvline(mean + sd, color='r', linestyle='dashed', linewidth=1)
+            histo.axvline(mean - sd, color='r', linestyle='dashed', linewidth=1)
+
             if show_true:
-                scatter.plot(xs, os, color='r') #graph true line NOT the trendline
+                scatter.plot(xs, os, color='b') #graph true line NOT the trendline
 
             fig.tight_layout()
             fig.canvas.draw() #
@@ -339,6 +347,5 @@ frequency_polygon(hist_data0, hist_data1, hist_data2, hist_data3, hist_data4)
 
 print("finished... Drawing Coefficient histograms...")
 coefficient_histogram(coefficients)
-
 
 print("Done. Exiting")
